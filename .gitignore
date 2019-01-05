@@ -1,0 +1,16 @@
+.dub
+docs.json
+__dummy.html
+mediainfo-d
+mediainfo-d.so
+mediainfo-d.dylib
+mediainfo-d.dll
+mediainfo-d.a
+mediainfo-d.lib
+mediainfo-d-test-*
+*.exe
+*.o
+*.obj
+*.lst
+*~
+
