@@ -1,3 +1,4 @@
+
 # mediainfo-d
 
 D language bindings for libmediainfo
@@ -7,7 +8,7 @@ Prerequisites:
 - A working D compiler and Dub.
 
 Usage:
-- Add 'mediainfo_d' as a dependancy to your dub project file.
+- Add 'mediainfo-d' as a dependancy to your dub project file.
 - Please also read the dub documentation for details.
 
 ```
@@ -17,4 +18,9 @@ import mediainfo;   /* Import optionally a more OO layer, WIP */
 
 Todos:
 - Added real unit- and module-tests
-- Fixup OO layer for D2
+- Port the higher level C++ classes to D
+- Cleanups
+
+Annotation:
+While working on the dub package, I found some older work at https://github.com/jpf91/MediaInfoD .
+I adapted and ported some of the code and the example to D2 and latest libphobos for the dub packaging.

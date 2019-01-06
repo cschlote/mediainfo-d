@@ -2,7 +2,7 @@
 	"description": "D language bindings for then libmediainfo library.",
 	"license": "bsd-2",
 	"authors": [
-		"Carsten Schlote"
+		"Johannes Pfau", "Carsten Schlote"
 	],
 	"name": "mediainfo-d",
 	"targetType": "autodetect",
