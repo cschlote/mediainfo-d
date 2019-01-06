@@ -1,0 +1,44 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "gdb",
+            "request": "launch",
+            "name": "Launch Demo Program 1 (gdb)",
+            "target": "./mediainfo-demo1",
+            "cwd": "${workspaceRoot}/examples/mediainfo-demo1/",
+            "preLaunchTask": "build-demo1",
+            "arguments": "/path/to/a/mediafile"
+        },
+        {
+            "name": "Launch Program 1 (lldb)",
+            "type": "lldb-mi",
+            "request": "launch",
+            "target": "./mediainfo-demo1",
+            "preLaunchTask": "build-demo1",
+            "cwd": "${workspaceRoot}/examples/mediainfo-demo1/",
+            "arguments": "/path/to/a/mediafile"
+        },
+        {
+            "type": "gdb",
+            "request": "launch",
+            "name": "Launch Demo Program 2 (gdb)",
+            "target": "./mediainfo-demo2",
+            "cwd": "${workspaceRoot}/examples/mediainfo-demo2/",
+            "preLaunchTask": "build-demo2",
+            "arguments": "/path/to/a/media/directory"
+        },
+        {
+            "name": "Launch Program 2 (lldb)",
+            "type": "lldb-mi",
+            "request": "launch",
+            "target": "./mediainfo-demo2",
+            "preLaunchTask": "build-demo2",
+            "cwd": "${workspaceRoot}/examples/mediainfo-demo2/",
+            "arguments": "/path/to/a/media/directory"
+        }
+    ]
+}
