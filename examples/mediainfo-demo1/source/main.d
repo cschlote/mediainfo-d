@@ -6,7 +6,6 @@ import std.stdio;
 import mediainfodll;
 import mediainfo;
 
-
 int main(string[] args)
 {
     if (args.length < 2)
@@ -57,7 +56,8 @@ int main(string[] args)
             writefln(" (%s)", cpos);
         else
             writeln();
-        writefln("  Duration: %s", info.get(MediaInfo_stream_t.MediaInfo_Stream_Audio, i, "Duration/String"));
+        writefln("  Duration: %s",
+                info.get(MediaInfo_stream_t.MediaInfo_Stream_Audio, i, "Duration/String"));
         string brate = info.get(MediaInfo_stream_t.MediaInfo_Stream_Audio, i, "BitRate");
         if (brate != "")
         {
@@ -70,7 +70,8 @@ int main(string[] args)
     for (uint i = 0; i < nText; i++)
     {
         writefln("Text track %s:", i);
-        writefln("  Language: %s", info.get(MediaInfo_stream_t.MediaInfo_Stream_Text, i, "Language"));
+        writefln("  Language: %s",
+                info.get(MediaInfo_stream_t.MediaInfo_Stream_Text, i, "Language"));
         writefln("  FPS: %s", info.get(MediaInfo_stream_t.MediaInfo_Stream_Text, i, "FrameRate"));
         writefln("  Duration: %s",
                 info.get(MediaInfo_stream_t.MediaInfo_Stream_Text, i, "Duration/String"));

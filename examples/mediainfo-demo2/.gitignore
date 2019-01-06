@@ -1,0 +1,17 @@
+.dub
+docs.json
+__dummy.html
+docs/
+mediainfo-demo2.so
+mediainfo-demo2.dylib
+mediainfo-demo2.dll
+mediainfo-demo2.a
+mediainfo-demo2.lib
+mediainfo-demo2-test-*
+dub.selections.json
+mediainfo-demo2
+*.exe
+*.o
+*.obj
+*.lst
+*.mdb
