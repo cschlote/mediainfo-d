@@ -10,6 +10,7 @@ module mediainfo;
 import std.string;
 import std.conv;
 import std.typecons;
+
 import mediainfodll;
 
 //public alias MediaInfo_stream_t Stream;
@@ -39,7 +40,7 @@ public struct MediaInfo
             {
                 if(_payload)
                 {
-                    MediaInfo_Delete(_payload);
+                    MediaInfoA_Delete(_payload);
                     _payload = null;
                 }
             }
@@ -62,7 +63,8 @@ public struct MediaInfo
         static MediaInfo opCall()
         {
             MediaInfo info;
-            void* h = MediaInfo_New();
+            auto h = MediaInfoA_New();
+            info._data.refCountedStore.ensureInitialized();
             info._data._payload = h;
             return info;
         }
@@ -76,7 +78,7 @@ public struct MediaInfo
          */
         void open(string fileName)
         {
-            if(!MediaInfo_Open(handle, toStringz(fileName)))
+            if(!MediaInfoA_Open(handle, toStringz(fileName)))
             {
                 throw new MediaInfoException("Couldn't open file: " ~ fileName);
             }
@@ -110,7 +112,7 @@ public struct MediaInfo
          */
         size_t openBufferInit(long fileSize = -1, long fileOffset = 0)
         {
-            return MediaInfo_Open_Buffer_Init(handle, fileSize, fileOffset);
+            return MediaInfoA_Open_Buffer_Init(handle, fileSize, fileOffset);
         }
         /**
          * Open a stream (Continue).
@@ -123,7 +125,7 @@ public struct MediaInfo
          */
         size_t openBufferContinue(ubyte* buffer, size_t size)
         {
-            return MediaInfo_Open_Buffer_Continue(handle, buffer, size);
+            return MediaInfoA_Open_Buffer_Continue(handle, buffer, size);
         }
         /**
          * Open a stream (Get the needed file Offset).
@@ -136,7 +138,7 @@ public struct MediaInfo
          */
         long openBufferContinueGoToGet()
         {
-            return MediaInfo_Open_Buffer_Continue_GoTo_Get(handle);
+            return MediaInfoA_Open_Buffer_Continue_GoTo_Get(handle);
         }
         /**
          * Open a stream (Finalize).
@@ -145,7 +147,7 @@ public struct MediaInfo
          */
         size_t openBufferFinalize()
         {
-            return MediaInfo_Open_Buffer_Finalize(handle);
+            return MediaInfoA_Open_Buffer_Finalize(handle);
         }
 /+        /**
          * (NOT IMPLEMENTED YET) Save the file
@@ -170,7 +172,7 @@ public struct MediaInfo
          */
         void close()
         {
-            MediaInfo_Close(handle);
+            MediaInfoA_Close(handle);
         }
         /**
          * String MediaInfoLib::MediaInfo::Inform   (   size_t  Reserved = 0     )
@@ -183,7 +185,7 @@ public struct MediaInfo
          */
         string inform(size_t reserved = 0)
         {
-            return to!string(MediaInfo_Inform(handle, reserved));
+            return to!string(MediaInfoA_Inform(handle, reserved));
         }
         /**
          * Get a piece of information about a file (parameter is an integer).
@@ -202,7 +204,7 @@ public struct MediaInfo
         string get(MediaInfo_stream_t streamKind, size_t streamNumber, size_t parameter,
             MediaInfo_info_t infoKind = MediaInfo_info_t.MediaInfo_Info_Text)
         {
-            return to!string(MediaInfo_GetI(handle, streamKind, streamNumber,
+            return to!string(MediaInfoA_GetI(handle, streamKind, streamNumber,
                 parameter, infoKind));
         }
         /**
@@ -225,7 +227,7 @@ public struct MediaInfo
             const(string) parameter, MediaInfo_info_t infoKind = MediaInfo_info_t.MediaInfo_Info_Text,
             MediaInfo_info_t searchKind = MediaInfo_info_t.MediaInfo_Info_Name)
         {
-            return to!string(MediaInfo_Get(handle, streamKind, streamNumber, toStringz(parameter),
+            return to!string(MediaInfoA_Get(handle, streamKind, streamNumber, toStringz(parameter),
                 infoKind, searchKind));
         }
 /+        /**
@@ -293,7 +295,7 @@ public struct MediaInfo
          */
         size_t outputBufferGet(const(string) value)
         {
-            return MediaInfo_Output_Buffer_Get(handle, toStringz(value));
+            return MediaInfoA_Output_Buffer_Get(handle, toStringz(value));
         }
         /**
          * Output the written size when "File_Duplicate" option is used.
@@ -307,7 +309,7 @@ public struct MediaInfo
          */
         size_t outputBufferGet(size_t pos)
         {
-            return MediaInfo_Output_Buffer_GetI(handle, pos);
+            return MediaInfoA_Output_Buffer_GetI(handle, pos);
         }
         /**
          * Configure or get information about MediaInfoLib
@@ -320,7 +322,7 @@ public struct MediaInfo
          */
         string option(const(string) option, const(string) value = "")
         {
-            return to!string(MediaInfo_Option(handle, toStringz(option), toStringz(value)));
+            return to!string(MediaInfoA_Option(handle, toStringz(option), toStringz(value)));
         }
 
         /*
@@ -341,7 +343,7 @@ public struct MediaInfo
          */
         size_t getState()
         {
-            return MediaInfo_State_Get(handle);
+            return MediaInfoA_State_Get(handle);
         }
         /**
          * Count of streams of a stream kind (StreamNumber not filled), or count of piece of information in this stream.
@@ -352,6 +354,6 @@ public struct MediaInfo
          */
         size_t getCount(MediaInfo_stream_t streamKind, size_t streamNumber = -1)
         {
-            return MediaInfo_Count_Get(handle, streamKind, streamNumber);
+            return MediaInfoA_Count_Get(handle, streamKind, streamNumber);
         }
 }
