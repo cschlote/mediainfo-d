@@ -6,7 +6,7 @@
 	],
 	"copyright": "Created © 2018, Carsten Schlote",
 	"dependencies": {
-		"mediainfo-d":">=0.0.0"
+		"mediainfo-d":">=0.0.1"
 	},
 	"name": "mediainfo-demo1"
 }
