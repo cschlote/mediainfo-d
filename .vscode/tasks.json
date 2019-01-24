@@ -18,6 +18,18 @@
         },
         {
             // Requires dub and ldc to be installed on host
+            "label": "build-docs",
+            "type": "shell",
+            "command": "dub build --build=docs -v",
+            "group": {
+                "kind": "build"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            // Requires dub and ldc to be installed on host
             "label": "build-demo1",
             "type": "shell",
             "command": "cd examples/mediainfo-demo1 && dub build --compiler=ldc2 -v",

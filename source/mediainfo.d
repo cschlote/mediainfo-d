@@ -289,7 +289,7 @@ public struct MediaInfo
          * Output the written size when "File_Duplicate" option is used.
          *
          * Params:
-         * Value = The unique name of the duplicated stream (begin with "memory://")
+         * value = The unique name of the duplicated stream (begin with "memory://")
          * Returns:
          * The size of the used buffer
          */
@@ -303,7 +303,7 @@ public struct MediaInfo
          * Output the written size when "File_Duplicate" option is used.
          *
          * Params:
-         * Value = The order of calling
+         * pos = The position ?
          * Returns:
          * The size of the used buffer
          */
@@ -315,8 +315,8 @@ public struct MediaInfo
          * Configure or get information about MediaInfoLib
          *
          * Params:
-         * Option = The name of option
-         * Value = The value of option
+         * option = The name of option
+         * value = The value of option
          * Returns:
          * Depend of the option: by default "" (nothing) means No, other means Yes
          */
