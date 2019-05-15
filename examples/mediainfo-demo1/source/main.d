@@ -38,8 +38,10 @@ int main(string[] args)
     const ulong nAudio = info.getCount(MediaInfo_stream_t.MediaInfo_Stream_Audio);
     const ulong nText = info.getCount(MediaInfo_stream_t.MediaInfo_Stream_Text);
 
-    if (nText == 0 && nVideo == 0 && nAudio == 0)
+    if (nText == 0 && nVideo == 0 && nAudio == 0) {
+		writeln("Found no media info on this file.");
         return 0;
+	}
 
     writefln("---%s---", info.get(MediaInfo_stream_t.MediaInfo_Stream_General, 0, "FileName"));
     for (uint i = 0; i < nVideo; i++)
