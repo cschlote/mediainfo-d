@@ -1,12 +1,12 @@
 {
-	"description": "Some example code for the lmdb binding.",
+	"description": "Some example code for the libmediainfo binding.",
 	"license": "Public Domain",
 	"authors": [
 		"Johannes Pfau", "Carsten Schlote"
 	],
 	"copyright": "Created © 2018, Carsten Schlote",
 	"dependencies": {
-		"mediainfo-d":">=0.0.1"
+		"mediainfo-d":">=0.0.3"
 	},
 	"name": "mediainfo-demo2"
 }

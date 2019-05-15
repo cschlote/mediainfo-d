@@ -8,25 +8,33 @@ import mediainfo;
 
 int main(string[] args)
 {
-    if (args.length < 2)
-        return 1;
+    string fileName;
+    assert(args.length >= 2, "Pass a filename to the program.");
+    fileName = args[1];
+
     auto info = MediaInfo();
+
     string vstring = info.option("Info_Version", "0.7.38.0;DTest;0.1");
     writefln("Found version %s", vstring);
     if (vstring == "")
         throw new Exception("Incompatible mediainfo version");
 
+    string infoParams = info.option("Info_Parameters");
+    string infoCodecs = info.option("Info_Codecs");
+
     info.option("Internet", "No");
 
-    info.open(args[1]);
+    info.open(fileName);
     scope (exit)
     {
         info.close();
     }
+    string inform = info.inform();
+    writefln("Got inform: %s", inform);
 
-    ulong nVideo = info.getCount(MediaInfo_stream_t.MediaInfo_Stream_Video);
-    ulong nAudio = info.getCount(MediaInfo_stream_t.MediaInfo_Stream_Audio);
-    ulong nText = info.getCount(MediaInfo_stream_t.MediaInfo_Stream_Text);
+    const ulong nVideo = info.getCount(MediaInfo_stream_t.MediaInfo_Stream_Video);
+    const ulong nAudio = info.getCount(MediaInfo_stream_t.MediaInfo_Stream_Audio);
+    const ulong nText = info.getCount(MediaInfo_stream_t.MediaInfo_Stream_Text);
 
     if (nText == 0 && nVideo == 0 && nAudio == 0)
         return 0;
