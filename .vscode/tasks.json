@@ -7,7 +7,7 @@
             // Requires dub and ldc to be installed on host
             "label": "build-host",
             "type": "shell",
-            "command": "dub build --compiler=ldc2 -v",
+            "command": "dub build --compiler=ldc2 -v -f",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -18,7 +18,7 @@
         },
         {
             // Requires dub and ldc to be installed on host
-            "label": "build-docs",
+            "label": "build-ddocs",
             "type": "shell",
             "command": "dub build --build=docs -v",
             "group": {
@@ -30,12 +30,23 @@
         },
         {
             // Requires dub and ldc to be installed on host
+            "label": "build-ddox",
+            "type": "shell",
+            "command": "dub build --build=ddox -v",
+            "group": {
+                "kind": "build"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            // Requires dub and ldc to be installed on host
             "label": "build-demo1",
             "type": "shell",
-            "command": "cd examples/mediainfo-demo1 && dub build --compiler=ldc2 -v",
+            "command": "cd examples/mediainfo-demo1 && dub build --compiler=ldc2 -v -f",
             "group": {
-                "kind": "build",
-                "isDefault": true
+                "kind": "build"
             },
             "problemMatcher": [
                 "$gcc"
@@ -45,10 +56,9 @@
             // Requires dub and ldc to be installed on host
             "label": "build-demo2",
             "type": "shell",
-            "command": "cd examples/mediainfo-demo2 && dub build --compiler=ldc2 -v",
+            "command": "cd examples/mediainfo-demo2 && dub build --compiler=ldc2 -v -f",
             "group": {
-                "kind": "build",
-                "isDefault": true
+                "kind": "build"
             },
             "problemMatcher": [
                 "$gcc"
@@ -60,8 +70,7 @@
             "type": "shell",
             "command": "dub test --compiler=ldc2 -v",
             "group": {
-                "kind": "build",
-                "isDefault": false
+                "kind": "build"
             },
             "problemMatcher": [
                 "$gcc"
