@@ -19,18 +19,20 @@ int main(string[] args)
     if (vstring == "")
         throw new Exception("Incompatible mediainfo version");
 
-    string infoParams = info.option("Info_Parameters");
-    string infoCodecs = info.option("Info_Codecs");
-
-    info.option("Internet", "No");
+    //~ string infoParams = info.option("Info_Parameters");
+    //~ writeln(infoParams);
+    //~ string infoCodecs = info.option("Info_Codecs");
+    //~ writeln(infoCodecs);
+    string infoInternet = info.option("Internet", "No");
+    //~ writeln(infoInternet);
 
     info.open(fileName);
     scope (exit)
     {
         info.close();
     }
-    string inform = info.inform();
-    writefln("Got inform: %s", inform);
+    //~ string inform = info.inform();
+    //~ writefln("Got inform: %s", inform);
 
     const ulong nVideo = info.getCount(MediaInfo_stream_t.MediaInfo_Stream_Video);
     const ulong nAudio = info.getCount(MediaInfo_stream_t.MediaInfo_Stream_Audio);
