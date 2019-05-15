@@ -8,5 +8,6 @@
 	"targetType": "autodetect",
 	"lflags": [
 		"-lmediainfo"
-	]
+	],
+	"versions": [ "MediaInfo_UTF", "MediaInfo_Ansi", "Workaround_UTF_Bug" ]
 }
