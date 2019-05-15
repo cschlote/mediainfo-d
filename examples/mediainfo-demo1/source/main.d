@@ -9,7 +9,7 @@ import mediainfo;
 int main(string[] args)
 {
     string fileName;
-    assert(args.length >= 2, "Pass a filename to the program.");
+    assert(args.length >= 2, "Pass a filename to scan to the program.");
     fileName = args[1];
 
     auto info = MediaInfo();

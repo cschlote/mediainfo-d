@@ -85,8 +85,10 @@ string[] audio_extensions = [
 
 void main(string[] args)
 {
-    if (args.length < 2)
+    if (args.length < 2) {
+		writeln("You must give a path to scan.");
         return;
+	}
     auto info = MediaInfo();
     string vstring = info.option("Info_Version", "0.7.38.0;DTest;0.1");
     writefln("Found version %s", vstring);

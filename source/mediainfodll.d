@@ -16,7 +16,7 @@ extern (C):
 import core.stdc.config;
 
 /*Char types                                                               */
-/* D is always unicode! Note: wchar_t is diffeent on Poxix vs. Windows!    */
+/* D is always unicode! Note: wchar_t is different on Poxix and Windows!   */
 version(Windows) {
     alias MediaInfo_Char = char;
     alias MediaInfo_WChar = wchar;
