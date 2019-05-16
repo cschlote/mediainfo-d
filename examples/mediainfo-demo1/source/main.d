@@ -12,12 +12,11 @@ int main(string[] args)
     assert(args.length >= 2, "Pass a filename to scan to the program.");
     fileName = args[1];
 
-
-    auto rc0 = MediaInfoDLL_Load();
-    writeln("Loader result: ", rc0);
-    auto rc1 = MediaInfoDLL_IsLoaded();
-    writeln("IsLoaded result:", rc1);
-    MediaInfoDLL_UnLoad();
+    //~ auto rc0 = MediaInfoDLL_Load();
+    //~ writeln("Loader result: ", rc0);
+    //~ auto rc1 = MediaInfoDLL_IsLoaded();
+    //~ writeln("IsLoaded result:", rc1);
+    //~ MediaInfoDLL_UnLoad();
 
     auto info = MediaInfo();
 

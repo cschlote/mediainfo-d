@@ -7,7 +7,7 @@
 	"name": "mediainfo-d",
 	"targetType": "autodetect",
 	"lflags": [
-		"-lmediainfo"
+		"-ldl"
 	],
 	"versions": [ "MediaInfo_UTF", "Workaround_UTF_Bug" ]
 }

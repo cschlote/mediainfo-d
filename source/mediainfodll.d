@@ -68,8 +68,6 @@ enum MediaInfo_info_t
     MediaInfo_Info_Max = 8
 }
 
-alias MediaInfo_info_C = MediaInfo_info_t;
-
 /** @brief Option if InfoKind = Info_Options */
 enum MediaInfo_infooptions_t
 {
@@ -140,10 +138,10 @@ else
     extern __gshared void MediaInfoListA_Close (void*, size_t);
     extern __gshared const(char)* MediaInfoA_Inform (void*, size_t Reserved);
     extern __gshared const(char)* MediaInfoListA_Inform (void*, size_t, size_t Reserved);
-    extern __gshared const(char)* MediaInfoA_GetI (void*, MediaInfo_stream_t StreamKind, size_t StreamNumber, size_t Parameter, MediaInfo_info_C KindOfInfo);
-    extern __gshared const(char)* MediaInfoListA_GetI (void*, size_t, MediaInfo_stream_t StreamKind, size_t StreamNumber, size_t Parameter, MediaInfo_info_C KindOfInfo);
-    extern __gshared const(char)* MediaInfoA_Get (void*, MediaInfo_stream_t StreamKind, size_t StreamNumber, const(MediaInfo_Char)* Parameter, MediaInfo_info_C KindOfInfo, MediaInfo_info_C KindOfSearch);
-    extern __gshared const(char)* MediaInfoListA_Get (void*, size_t, MediaInfo_stream_t StreamKind, size_t StreamNumber, const(MediaInfo_Char)* Parameter, MediaInfo_info_C KindOfInfo, MediaInfo_info_C KindOfSearch);
+    extern __gshared const(char)* MediaInfoA_GetI (void*, MediaInfo_stream_t StreamKind, size_t StreamNumber, size_t Parameter, MediaInfo_info_t KindOfInfo);
+    extern __gshared const(char)* MediaInfoListA_GetI (void*, size_t, MediaInfo_stream_t StreamKind, size_t StreamNumber, size_t Parameter, MediaInfo_info_t KindOfInfo);
+    extern __gshared const(char)* MediaInfoA_Get (void*, MediaInfo_stream_t StreamKind, size_t StreamNumber, const(MediaInfo_Char)* Parameter, MediaInfo_info_t KindOfInfo, MediaInfo_info_t KindOfSearch);
+    extern __gshared const(char)* MediaInfoListA_Get (void*, size_t, MediaInfo_stream_t StreamKind, size_t StreamNumber, const(MediaInfo_Char)* Parameter, MediaInfo_info_t KindOfInfo, MediaInfo_info_t KindOfSearch);
     extern __gshared c_ulong MediaInfoA_Output_Buffer_Get (void*, const(MediaInfo_Char)* Parameter);
     extern __gshared c_ulong MediaInfoA_Output_Buffer_GetI (void*, size_t Pos);
     extern __gshared const(char)* MediaInfoA_Option (void*, const(MediaInfo_Char)* Parameter, const(MediaInfo_Char)* Value);

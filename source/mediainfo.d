@@ -40,7 +40,7 @@ private:
         {
             if(_payload)
             {
-                MediaInfo_Delete(_payload);
+                mediainfo_FuntionTable.MediaInfo_Delete(_payload);
                 _payload = null;
 				MediaInfoDLL_UnLoad();
             }
