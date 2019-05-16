@@ -151,8 +151,8 @@ void processFile(string name, MediaInfo info)
             return;
         }
 
-        writefln("---%s---", shortName(info.get(MediaInfo_stream_t.MediaInfo_Stream_General,
-                0, "FileName"), 74));
+        //writefln("---%s---", shortName(info.get(MediaInfo_stream_t.MediaInfo_Stream_General, 0, "FileName"), 74));
+        writefln("---%s---", shortName(name.baseName,74));
         for (int i = 0; i < nvideo; i++)
         {
             writefln("Video track %s:", i);
