@@ -12,6 +12,13 @@ int main(string[] args)
     assert(args.length >= 2, "Pass a filename to scan to the program.");
     fileName = args[1];
 
+
+    auto rc0 = MediaInfoDLL_Load();
+    writeln("Loader result: ", rc0);
+    auto rc1 = MediaInfoDLL_IsLoaded();
+    writeln("IsLoaded result:", rc1);
+    MediaInfoDLL_UnLoad();
+
     auto info = MediaInfo();
 
     string vstring = info.option("Info_Version", "0.7.38.0;DTest;0.1");
@@ -39,9 +46,9 @@ int main(string[] args)
     const ulong nText = info.getCount(MediaInfo_stream_t.MediaInfo_Stream_Text);
 
     if (nText == 0 && nVideo == 0 && nAudio == 0) {
-		writeln("Found no media info on this file.");
+        writeln("Found no media info on this file.");
         return 0;
-	}
+    }
 
     writefln("---%s---", info.get(MediaInfo_stream_t.MediaInfo_Stream_General, 0, "FileName"));
     for (uint i = 0; i < nVideo; i++)
