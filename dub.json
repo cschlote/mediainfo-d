@@ -9,5 +9,5 @@
 	"lflags": [
 		"-lmediainfo"
 	],
-	"versions": [ "MediaInfo_UTF", "MediaInfo_Ansi", "Workaround_UTF_Bug" ]
+	"versions": [ "MediaInfo_UTF", "Workaround_UTF_Bug" ]
 }

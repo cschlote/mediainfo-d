@@ -15,28 +15,27 @@
 extern (C):
 import core.stdc.config;
 
-/*Char types                                                               */
-/* D is always unicode! Note: wchar_t is different on Poxix and Windows!   */
-version(Windows) {
-    alias MediaInfo_Char = char;
-    version(UNICODE) {
-        enum MEDIAINFO_Ansi = "";
-        alias MediaInfo_WChar = wchar;
-    } else {
-        enum MEDIAINFO_Ansi = "A";
-        alias MediaInfo_WChar = char;
-    }
+/* Char types                                                              */
+version(MediaInfo_UTF)
+{
+	version(Windows) {
+		enum MEDIAINFO_Ansi = "";
+		alias MediaInfo_Char = wchar;
+	}
+	else {
+		enum MEDIAINFO_Ansi = "";
+		alias MediaInfo_Char = dchar;
+	}
 }
 else {
-    alias MediaInfo_Char = char;
-    enum MEDIAINFO_Ansi = "";
-    alias MediaInfo_WChar = dchar;
+	enum MEDIAINFO_Ansi = "A";
+	alias MediaInfo_Char = char;
 }
 
-/*8-bit int                                                                */
+/* 8-bit int                                                               */
 alias MediaInfo_int8u = ubyte;
 
-/*64-bit int                                                               */
+/* 64-bit int                                                              */
 enum MAXTYPE_INT = 64;
 alias MediaInfo_int64u = ulong;
 
@@ -97,8 +96,8 @@ version(MediaInfo_UTF)
     extern __gshared void* MediaInfoList_New();
     extern __gshared void MediaInfo_Delete (void*);
     extern __gshared void MediaInfoList_Delete (void*);
-    extern __gshared c_ulong MediaInfoList_Open (void*, const(MediaInfo_WChar)*, const MediaInfo_fileoptions_t);
-    extern __gshared c_ulong MediaInfo_Open (void*, const(MediaInfo_WChar)*);
+    extern __gshared c_ulong MediaInfoList_Open (void*, const(MediaInfo_Char)*, const MediaInfo_fileoptions_t);
+    extern __gshared c_ulong MediaInfo_Open (void*, const(MediaInfo_Char)*);
     extern __gshared c_ulong  MediaInfo_Open_Buffer_Init (void*, MediaInfo_int64u File_Size, MediaInfo_int64u File_Offset);
     extern __gshared c_ulong MediaInfo_Open_Buffer_Continue (void*, MediaInfo_int8u* Buffer, size_t Buffer_Size);
     extern __gshared ulong MediaInfo_Open_Buffer_Continue_GoTo_Get (void*);
@@ -106,16 +105,16 @@ version(MediaInfo_UTF)
     extern __gshared c_ulong MediaInfo_Open_NextPacket (void*);
     extern __gshared void MediaInfo_Close (void*);
     extern __gshared void MediaInfoList_Close (void*, size_t);
-    extern __gshared const(MediaInfo_WChar)* MediaInfo_Inform (void*, size_t Reserved);
-    extern __gshared const(MediaInfo_WChar)* MediaInfoList_Inform (void*, size_t, size_t Reserved);
-    extern __gshared const(MediaInfo_WChar)* MediaInfo_GetI (void*, MediaInfo_stream_t StreamKind, size_t StreamNumber, size_t Parameter, MediaInfo_info_C KindOfInfo);
-    extern __gshared const(MediaInfo_WChar)* MediaInfoList_GetI (void*, size_t, MediaInfo_stream_t StreamKind, size_t StreamNumber, size_t Parameter, MediaInfo_info_C KindOfInfo);
-    extern __gshared const(MediaInfo_WChar)* MediaInfo_Get (void*, MediaInfo_stream_t StreamKind, size_t StreamNumber, const(MediaInfo_WChar)* Parameter, MediaInfo_info_C KindOfInfo, MediaInfo_info_C KindOfSearch);
-    extern __gshared const(MediaInfo_WChar)* MediaInfoList_Get (void*, size_t, MediaInfo_stream_t StreamKind, size_t StreamNumber, const(MediaInfo_WChar)* Parameter, MediaInfo_info_C KindOfInfo, MediaInfo_info_C KindOfSearch);
-    extern __gshared c_ulong MediaInfo_Output_Buffer_Get (void*, const(MediaInfo_WChar)* Parameter);
+    extern __gshared const(MediaInfo_Char)* MediaInfo_Inform (void*, size_t Reserved);
+    extern __gshared const(MediaInfo_Char)* MediaInfoList_Inform (void*, size_t, size_t Reserved);
+    extern __gshared const(MediaInfo_Char)* MediaInfo_GetI (void*, MediaInfo_stream_t StreamKind, size_t StreamNumber, size_t Parameter, MediaInfo_info_t KindOfInfo);
+    extern __gshared const(MediaInfo_Char)* MediaInfoList_GetI (void*, size_t, MediaInfo_stream_t StreamKind, size_t StreamNumber, size_t Parameter, MediaInfo_info_t KindOfInfo);
+    extern __gshared const(MediaInfo_Char)* MediaInfo_Get (void*, MediaInfo_stream_t StreamKind, size_t StreamNumber, const(MediaInfo_Char)* Parameter, MediaInfo_info_t KindOfInfo, MediaInfo_info_t KindOfSearch);
+    extern __gshared const(MediaInfo_Char)* MediaInfoList_Get (void*, size_t, MediaInfo_stream_t StreamKind, size_t StreamNumber, const(MediaInfo_Char)* Parameter, MediaInfo_info_t KindOfInfo, MediaInfo_info_t KindOfSearch);
+    extern __gshared c_ulong MediaInfo_Output_Buffer_Get (void*, const(MediaInfo_Char)* Parameter);
     extern __gshared c_ulong MediaInfo_Output_Buffer_GetI (void*, size_t Pos);
-    extern __gshared const(MediaInfo_WChar)* MediaInfo_Option (void*, const(MediaInfo_WChar)* Parameter, const(MediaInfo_WChar)* Value);
-    extern __gshared const(MediaInfo_WChar)* MediaInfoList_Option (void*, const(MediaInfo_WChar)* Parameter, const(MediaInfo_WChar)* Value);
+    extern __gshared const(MediaInfo_Char)* MediaInfo_Option (void*, const(MediaInfo_Char)* Parameter, const(MediaInfo_Char)* Value);
+    extern __gshared const(MediaInfo_Char)* MediaInfoList_Option (void*, const(MediaInfo_Char)* Parameter, const(MediaInfo_Char)* Value);
     extern __gshared c_ulong MediaInfo_State_Get (void*);
     extern __gshared c_ulong MediaInfoList_State_Get (void*);
     extern __gshared c_ulong MediaInfo_Count_Get (void*, MediaInfo_stream_t StreamKind, size_t StreamNumber);
@@ -123,8 +122,7 @@ version(MediaInfo_UTF)
     extern __gshared c_ulong MediaInfo_Count_Get_Files (void*);
     extern __gshared c_ulong MediaInfoList_Count_Get_Files (void*);
 }
-
-version(MediaInfo_Ansi)
+else
 {
     /* Functions using Ansi C-Strings (7Bit chars!) - no locale support, codepage on windows */
     extern __gshared void* MediaInfoA_New();
