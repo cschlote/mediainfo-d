@@ -18,18 +18,18 @@ import core.stdc.config;
 /*Char types                                                               */
 /* D is always unicode! Note: wchar_t is different on Poxix and Windows!   */
 version(Windows) {
-	alias MediaInfo_Char = char;
-	version(UNICODE) {
-		enum MEDIAINFO_Ansi = "";
-		alias MediaInfo_WChar = wchar;
-	} else {
-		enum MEDIAINFO_Ansi = "A";
-		alias MediaInfo_WChar = char;
-	}
+    alias MediaInfo_Char = char;
+    version(UNICODE) {
+        enum MEDIAINFO_Ansi = "";
+        alias MediaInfo_WChar = wchar;
+    } else {
+        enum MEDIAINFO_Ansi = "A";
+        alias MediaInfo_WChar = char;
+    }
 }
 else {
     alias MediaInfo_Char = char;
-	enum MEDIAINFO_Ansi = "";
+    enum MEDIAINFO_Ansi = "";
     alias MediaInfo_WChar = dchar;
 }
 
@@ -163,13 +163,13 @@ version(MediaInfo_Ansi)
 version(MEDIAINFO_GLIBC) {
     template MEDIAINFO_ASSIGN(string _Name) {
         void MEDIAINFO_ASSIGN(ref size_t Errors) {
-            auto rv = g_module_symbol (MediaInfo_Module, "MediaInfo" ~ MEDIAINFO_Ansi ~ "_" ~_Name, mixin("cast(gpointer*) & ptrMediaInfo_" ~ _Name ~")" ));
+            auto rv = g_module_symbol (MediaInfo_Module, "MediaInfo" ~ MEDIAINFO_Ansi ~ "_" ~_Name, mixin("cast(gpointer*) & mediainfo_FuntionTable.MediaInfo_" ~ _Name ~")" ));
             if (!rv) Errors++;
         }
     }
     template MEDIAINFOLIST_ASSIGN(string _Name) {
         void MEDIAINFOLIST_ASSIGN(ref size_t Errors) {
-            auto rv = g_module_symbol (MediaInfo_Module, "MediaInfoList" ~ MEDIAINFO_Ansi ~ "_" ~_Name, mixin("cast(gpointer*) & ptrMediaInfoList_" ~ _Name ~")" ));
+            auto rv = g_module_symbol (MediaInfo_Module, "MediaInfoList" ~ MEDIAINFO_Ansi ~ "_" ~_Name, mixin("cast(gpointer*) & mediainfo_FuntionTable.MediaInfoList_" ~ _Name ~")" ));
             if (!rv) Errors++;
         }
     }
@@ -177,108 +177,102 @@ version(MEDIAINFO_GLIBC) {
     template MEDIAINFO_ASSIGN(string _Name) {
         void MEDIAINFO_ASSIGN(ref size_t Errors) {
             auto rv = GetProcAddress(MediaInfo_Module, "MediaInfo" ~ MEDIAINFO_Ansi ~ "_" ~ _Name);
-            mixin("ptrMediaInfo_" ~ _Name) = mixin("cast(MEDIAINFO" ~ MEDIAINFO_Ansi ~ "_" ~ _Name ~ ")rv");
-            if (mixin("ptrMediaInfo_" ~ _Name) == null) Errors++;
+            mixin("mediainfo_FuntionTable.MediaInfo_" ~ _Name) = mixin("cast(MEDIAINFO" ~ MEDIAINFO_Ansi ~ "_" ~ _Name ~ ")rv");
+            if (mixin("mediainfo_FuntionTable.MediaInfo_" ~ _Name) == null) Errors++;
         }
     }
     template MEDIAINFOLIST_ASSIGN(string _Name) {
         void MEDIAINFOLIST_ASSIGN(ref size_t Errors) {
             auto rv = GetProcAddress(MediaInfo_Module, "MediaInfoList" ~ MEDIAINFO_Ansi ~ "_" ~ _Name);
-            mixin("ptrMediaInfoList_" ~ _Name) = mixin("cast(MEDIAINFOLIST" ~ MEDIAINFO_Ansi ~ "_" ~ _Name ~ ")rv");
-            if (mixin("ptrMediaInfoList_" ~ _Name) == null) Errors++;
+            mixin("mediainfo_FuntionTable.MediaInfoList_" ~ _Name) = mixin("cast(MEDIAINFOLIST" ~ MEDIAINFO_Ansi ~ "_" ~ _Name ~ ")rv");
+            if (mixin("mediainfo_FuntionTable.MediaInfoList_" ~ _Name) == null) Errors++;
         }
     }
 } else {
     template MEDIAINFO_ASSIGN(string _Name) {
         void MEDIAINFO_ASSIGN(ref size_t Errors) {
             auto rv = dlsym(MediaInfo_Module, "MediaInfo" ~ MEDIAINFO_Ansi ~ "_" ~ _Name);
-            mixin("ptrMediaInfo_" ~ _Name) = mixin("cast(MEDIAINFO" ~ MEDIAINFO_Ansi ~ "_" ~ _Name ~ ")rv");
-            if (mixin("ptrMediaInfo_" ~ _Name) == null) Errors++;
+            mixin("mediainfo_FuntionTable.MediaInfo_" ~ _Name) = mixin("cast(MEDIAINFO" ~ MEDIAINFO_Ansi ~ "_" ~ _Name ~ ")rv");
+            if (mixin("mediainfo_FuntionTable.MediaInfo_" ~ _Name) is null) Errors++;
         }
     }
     template MEDIAINFOLIST_ASSIGN(string _Name) {
         void MEDIAINFOLIST_ASSIGN(ref size_t Errors) {
             auto rv = dlsym(MediaInfo_Module, "MediaInfoList" ~ MEDIAINFO_Ansi ~ "_" ~ _Name);
-            mixin("ptrMediaInfoList_" ~ _Name) = mixin("cast(MEDIAINFOLIST" ~ MEDIAINFO_Ansi ~ "_" ~ _Name ~ ")rv");
-            if (mixin("ptrMediaInfoList_" ~ _Name) == null) Errors++;
+            mixin("mediainfo_FuntionTable.MediaInfoList_" ~ _Name) = mixin("cast(MEDIAINFOLIST" ~ MEDIAINFO_Ansi ~ "_" ~ _Name ~ ")rv");
+            if (mixin("mediainfo_FuntionTable.MediaInfoList_" ~ _Name) is null) Errors++;
         }
     }
 }
 
-/* Define function pointers the hard way - use traits to get membertypes of struct functions */
+/* Define function pointer types - use either Ansi or wchar API here */
 
-alias MEDIAINFO_New = typeof(MediaInfo_New)*;
-MEDIAINFO_New ptrMediaInfo_New;
-alias MEDIAINFOLIST_New = typeof(MediaInfo_New)*;
-MEDIAINFOLIST_New ptrMediaInfoList_New;
+alias MEDIAINFO_New = typeof(mixin("MediaInfo" ~ MEDIAINFO_Ansi ~ "_New"))*;
+alias MEDIAINFOLIST_New = typeof(mixin("MediaInfoList" ~ MEDIAINFO_Ansi ~ "_New"))*;
+alias MEDIAINFO_Delete = typeof(mixin("MediaInfo" ~ MEDIAINFO_Ansi ~ "_Delete"))*;
+alias MEDIAINFOLIST_Delete = typeof(mixin("MediaInfoList" ~ MEDIAINFO_Ansi ~ "_Delete"))*;
+alias MEDIAINFO_Open = typeof(mixin("MediaInfo" ~ MEDIAINFO_Ansi ~ "_Open"))*;
+alias MEDIAINFOLIST_Open = typeof(mixin("MediaInfoList" ~ MEDIAINFO_Ansi ~ "_Open"))*;
+alias MEDIAINFO_Open_Buffer_Init = typeof(mixin("MediaInfo" ~ MEDIAINFO_Ansi ~ "_Open_Buffer_Init"))*;
+alias MEDIAINFO_Open_Buffer_Continue = typeof(mixin("MediaInfo" ~ MEDIAINFO_Ansi ~ "_Open_Buffer_Continue"))*;
+alias MEDIAINFO_Open_Buffer_Continue_GoTo_Get = typeof(mixin("MediaInfo" ~ MEDIAINFO_Ansi ~ "_Open_Buffer_Continue_GoTo_Get"))*;
+alias MEDIAINFO_Open_Buffer_Finalize = typeof(mixin("MediaInfo" ~ MEDIAINFO_Ansi ~ "_Open_Buffer_Finalize"))*;
+alias MEDIAINFO_Open_NextPacket = typeof(mixin("MediaInfo" ~ MEDIAINFO_Ansi ~ "_Open_NextPacket"))*;
+alias MEDIAINFO_Close = typeof(mixin("MediaInfo" ~ MEDIAINFO_Ansi ~ "_Close"))*;
+alias MEDIAINFOLIST_Close = typeof(mixin("MediaInfoList" ~ MEDIAINFO_Ansi ~ "_Close"))*;
+alias MEDIAINFO_Inform = typeof(mixin("MediaInfo" ~ MEDIAINFO_Ansi ~ "_Inform"))*;
+alias MEDIAINFOLIST_Inform = typeof(mixin("MediaInfoList" ~ MEDIAINFO_Ansi ~ "_Inform"))*;
+alias MEDIAINFO_GetI = typeof(mixin("MediaInfo" ~ MEDIAINFO_Ansi ~ "_GetI"))*;
+alias MEDIAINFOLIST_GetI = typeof(mixin("MediaInfoList" ~ MEDIAINFO_Ansi ~ "_GetI"))*;
+alias MEDIAINFO_Get = typeof(mixin("MediaInfo" ~ MEDIAINFO_Ansi ~ "_Get"))*;
+alias MEDIAINFOLIST_Get = typeof(mixin("MediaInfoList" ~ MEDIAINFO_Ansi ~ "_Get"))*;
+alias MEDIAINFO_Output_Buffer_Get = typeof(mixin("MediaInfo" ~ MEDIAINFO_Ansi ~ "_Output_Buffer_Get"))*;
+alias MEDIAINFO_Output_Buffer_GetI = typeof(mixin("MediaInfo" ~ MEDIAINFO_Ansi ~ "_Output_Buffer_GetI"))*;
+alias MEDIAINFO_Option = typeof(mixin("MediaInfo" ~ MEDIAINFO_Ansi ~ "_Option"))*;
+alias MEDIAINFOLIST_Option = typeof(mixin("MediaInfoList" ~ MEDIAINFO_Ansi ~ "_Option"))*;
+alias MEDIAINFO_State_Get = typeof(mixin("MediaInfo" ~ MEDIAINFO_Ansi ~ "_State_Get"))*;
+alias MEDIAINFOLIST_State_Get = typeof(mixin("MediaInfoList" ~ MEDIAINFO_Ansi ~ "_State_Get"))*;
+alias MEDIAINFO_Count_Get = typeof(mixin("MediaInfo" ~ MEDIAINFO_Ansi ~ "_Count_Get"))*;
+alias MEDIAINFOLIST_Count_Get = typeof(mixin("MediaInfoList" ~ MEDIAINFO_Ansi ~ "_Count_Get"))*;
+alias MEDIAINFO_Count_Get_Files = typeof(mixin("MediaInfo" ~ MEDIAINFO_Ansi ~ "_Count_Get_Files"))*;
+alias MEDIAINFOLIST_Count_Get_Files = typeof(mixin("MediaInfoList" ~ MEDIAINFO_Ansi ~ "_Count_Get_Files"))*;
 
-alias MEDIAINFO_Delete = typeof(MediaInfo_Delete)*;
-MEDIAINFO_Delete ptrMediaInfo_Delete;
-alias MEDIAINFOLIST_Delete = typeof(MediaInfoList_Delete)*;
-MEDIAINFOLIST_Delete ptrMediaInfoList_Delete;
+/*  A structure holding all the function pointers to the library - either UTF or Ansi API */
 
-alias MEDIAINFO_Open = typeof(MediaInfo_Open)*;
-MEDIAINFO_Open ptrMediaInfo_Open;
-alias MEDIAINFOLIST_Open = typeof(MediaInfoList_Open)*;
-MEDIAINFOLIST_Open ptrMediaInfoList_Open;
+struct MediaInfo_FunctionTable
+{
+    MEDIAINFO_New MediaInfo_New;
+    MEDIAINFOLIST_New MediaInfoList_New;
+    MEDIAINFO_Delete MediaInfo_Delete;
+    MEDIAINFOLIST_Delete MediaInfoList_Delete;
+    MEDIAINFO_Open MediaInfo_Open;
+    MEDIAINFOLIST_Open MediaInfoList_Open;
+    MEDIAINFO_Open_Buffer_Init MediaInfo_Open_Buffer_Init;
+    MEDIAINFO_Open_Buffer_Continue MediaInfo_Open_Buffer_Continue;
+    MEDIAINFO_Open_Buffer_Continue_GoTo_Get MediaInfo_Open_Buffer_Continue_GoTo_Get;
+    MEDIAINFO_Open_Buffer_Finalize MediaInfo_Open_Buffer_Finalize;
+    MEDIAINFO_Open_NextPacket MediaInfo_Open_NextPacket;
+    MEDIAINFO_Close MediaInfo_Close;
+    MEDIAINFOLIST_Close MediaInfoList_Close;
+    MEDIAINFO_Inform MediaInfo_Inform;
+    MEDIAINFOLIST_Inform MediaInfoList_Inform;
+    MEDIAINFO_GetI MediaInfo_GetI;
+    MEDIAINFOLIST_GetI MediaInfoList_GetI;
+    MEDIAINFO_Get MediaInfo_Get;
+    MEDIAINFOLIST_Get MediaInfoList_Get;
+    MEDIAINFO_Output_Buffer_Get MediaInfo_Output_Buffer_Get;
+    MEDIAINFO_Output_Buffer_GetI MediaInfo_Output_Buffer_GetI;
+    MEDIAINFO_Option MediaInfo_Option;
+    MEDIAINFOLIST_Option MediaInfoList_Option;
+    MEDIAINFO_State_Get MediaInfo_State_Get;
+    MEDIAINFOLIST_State_Get MediaInfoList_State_Get;
+    MEDIAINFO_Count_Get MediaInfo_Count_Get;
+    MEDIAINFOLIST_Count_Get MediaInfoList_Count_Get;
+    MEDIAINFO_Count_Get_Files MediaInfo_Count_Get_Files;
+    MEDIAINFOLIST_Count_Get_Files MediaInfoList_Count_Get_Files;
+}
 
-alias MEDIAINFO_Open_Buffer_Init = typeof(MediaInfo_Open_Buffer_Init)*;
-MEDIAINFO_Open_Buffer_Init ptrMediaInfo_Open_Buffer_Init;
-alias MEDIAINFO_Open_Buffer_Continue = typeof(MediaInfo_Open_Buffer_Continue)*;
-MEDIAINFO_Open_Buffer_Continue ptrMediaInfo_Open_Buffer_Continue;
-alias MEDIAINFO_Open_Buffer_Continue_GoTo_Get = typeof(MediaInfo_Open_Buffer_Continue_GoTo_Get)*;
-MEDIAINFO_Open_Buffer_Continue_GoTo_Get ptrMediaInfo_Open_Buffer_Continue_GoTo_Get;
-alias MEDIAINFO_Open_Buffer_Finalize = typeof(MediaInfo_Open_Buffer_Finalize)*;
-MEDIAINFO_Open_Buffer_Finalize ptrMediaInfo_Open_Buffer_Finalize;
-alias MEDIAINFO_Open_NextPacket = typeof(MediaInfo_Open_NextPacket)*;
-MEDIAINFO_Open_NextPacket ptrMediaInfo_Open_NextPacket;
-
-alias MEDIAINFO_Close = typeof(MediaInfo_Close)*;
-MEDIAINFO_Close ptrMediaInfo_Close;
-alias MEDIAINFOLIST_Close = typeof(MediaInfoList_Close)*;
-MEDIAINFOLIST_Close ptrMediaInfoList_Close;
-
-alias MEDIAINFO_Inform = typeof(MediaInfo_Inform)*;
-MEDIAINFO_Inform ptrMediaInfo_Inform;
-alias MEDIAINFOLIST_Inform = typeof(MediaInfoList_Inform)*;
-MEDIAINFOLIST_Inform ptrMediaInfoList_Inform;
-
-alias MEDIAINFO_GetI = typeof(MediaInfo_GetI)*;
-MEDIAINFO_GetI ptrMediaInfo_GetI;
-alias MEDIAINFOLIST_GetI = typeof(MediaInfoList_GetI)*;
-MEDIAINFOLIST_GetI ptrMediaInfoList_GetI;
-
-alias MEDIAINFO_Get = typeof(MediaInfo_Get)*;
-MEDIAINFO_Get ptrMediaInfo_Get;
-alias MEDIAINFOLIST_Get = typeof(MediaInfoList_Get)*;
-MEDIAINFOLIST_Get ptrMediaInfoList_Get;
-
-alias MEDIAINFO_Output_Buffer_Get = typeof(MediaInfo_Output_Buffer_Get)*;
-MEDIAINFO_Output_Buffer_Get ptrMediaInfo_Output_Buffer_Get;
-
-alias MEDIAINFO_Output_Buffer_GetI = typeof(MediaInfo_Output_Buffer_GetI)*;
-MEDIAINFO_Output_Buffer_GetI ptrMediaInfo_Output_Buffer_GetI;
-
-alias MEDIAINFO_Option = typeof(MediaInfo_Option)*;
-MEDIAINFO_Option ptrMediaInfo_Option;
-alias MEDIAINFOLIST_Option = typeof(MediaInfoList_Option)*;
-MEDIAINFOLIST_Option ptrMediaInfoList_Option;
-
-alias MEDIAINFO_State_Get = typeof(MediaInfo_State_Get)*;
-MEDIAINFO_State_Get ptrMediaInfo_State_Get;
-alias MEDIAINFOLIST_State_Get = typeof(MediaInfoList_State_Get)*;
-MEDIAINFOLIST_State_Get ptrMediaInfoList_State_Get;
-
-alias MEDIAINFO_Count_Get = typeof(MediaInfo_Count_Get)*;
-MEDIAINFO_Count_Get ptrMediaInfo_Count_Get;
-alias MEDIAINFOLIST_Count_Get = typeof(MediaInfoList_Count_Get)*;
-MEDIAINFOLIST_Count_Get ptrMediaInfoList_Count_Get;
-
-alias MEDIAINFO_Count_Get_Files = typeof(MediaInfo_Count_Get_Files)*;
-MEDIAINFO_Count_Get_Files ptrMediaInfo_Count_Get_Files;
-alias MEDIAINFOLIST_Count_Get_Files = typeof(MediaInfoList_Count_Get_Files)*;
-MEDIAINFOLIST_Count_Get_Files ptrMediaInfoList_Count_Get_Files;
-
+shared MediaInfo_FunctionTable mediainfo_FuntionTable;
 
 version(WINDOWS)
     enum MEDIAINFODLL_NAME = "MediaInfo.dll";
@@ -385,6 +379,7 @@ size_t MediaInfoDLL_Load()
     MEDIAINFO_ASSIGN!("Count_Get")(Errors);
     MEDIAINFOLIST_ASSIGN!("Count_Get")(Errors);
     MEDIAINFOLIST_ASSIGN!("Count_Get_Files")(Errors);
+
     if (Errors > 0) {
         // Unload DLL with errors
         version(MEDIAINFO_GLIBC) {
