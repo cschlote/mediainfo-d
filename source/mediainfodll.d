@@ -159,13 +159,13 @@ else
 version(MEDIAINFO_GLIBC) {
     template MEDIAINFO_ASSIGN(string _Name) {
         void MEDIAINFO_ASSIGN(ref size_t Errors) {
-            auto rv = g_module_symbol (MediaInfo_Module, "MediaInfo" ~ MEDIAINFO_Ansi ~ "_" ~_Name, mixin("cast(gpointer*) & mediainfo_FuntionTable.MediaInfo_" ~ _Name ~")" ));
+            auto rv = g_module_symbol (MediaInfo_Module, "MediaInfo" ~ MEDIAINFO_Ansi ~ "_" ~_Name, mixin("cast(gpointer*) & mediainfo_FunctionTable.MediaInfo_" ~ _Name ~")" ));
             if (!rv) Errors++;
         }
     }
     template MEDIAINFOLIST_ASSIGN(string _Name) {
         void MEDIAINFOLIST_ASSIGN(ref size_t Errors) {
-            auto rv = g_module_symbol (MediaInfo_Module, "MediaInfoList" ~ MEDIAINFO_Ansi ~ "_" ~_Name, mixin("cast(gpointer*) & mediainfo_FuntionTable.MediaInfoList_" ~ _Name ~")" ));
+            auto rv = g_module_symbol (MediaInfo_Module, "MediaInfoList" ~ MEDIAINFO_Ansi ~ "_" ~_Name, mixin("cast(gpointer*) & mediainfo_FunctionTable.MediaInfoList_" ~ _Name ~")" ));
             if (!rv) Errors++;
         }
     }
@@ -173,30 +173,30 @@ version(MEDIAINFO_GLIBC) {
     template MEDIAINFO_ASSIGN(string _Name) {
         void MEDIAINFO_ASSIGN(ref size_t Errors) {
             auto rv = GetProcAddress(MediaInfo_Module, "MediaInfo" ~ MEDIAINFO_Ansi ~ "_" ~ _Name);
-            mixin("mediainfo_FuntionTable.MediaInfo_" ~ _Name) = mixin("cast(MEDIAINFO" ~ MEDIAINFO_Ansi ~ "_" ~ _Name ~ ")rv");
-            if (mixin("mediainfo_FuntionTable.MediaInfo_" ~ _Name) == null) Errors++;
+            mixin("mediainfo_FunctionTable.MediaInfo_" ~ _Name) = mixin("cast(MEDIAINFO" ~ MEDIAINFO_Ansi ~ "_" ~ _Name ~ ")rv");
+            if (mixin("mediainfo_FunctionTable.MediaInfo_" ~ _Name) == null) Errors++;
         }
     }
     template MEDIAINFOLIST_ASSIGN(string _Name) {
         void MEDIAINFOLIST_ASSIGN(ref size_t Errors) {
             auto rv = GetProcAddress(MediaInfo_Module, "MediaInfoList" ~ MEDIAINFO_Ansi ~ "_" ~ _Name);
-            mixin("mediainfo_FuntionTable.MediaInfoList_" ~ _Name) = mixin("cast(MEDIAINFOLIST" ~ MEDIAINFO_Ansi ~ "_" ~ _Name ~ ")rv");
-            if (mixin("mediainfo_FuntionTable.MediaInfoList_" ~ _Name) == null) Errors++;
+            mixin("mediainfo_FunctionTable.MediaInfoList_" ~ _Name) = mixin("cast(MEDIAINFOLIST" ~ MEDIAINFO_Ansi ~ "_" ~ _Name ~ ")rv");
+            if (mixin("mediainfo_FunctionTable.MediaInfoList_" ~ _Name) == null) Errors++;
         }
     }
 } else {
     template MEDIAINFO_ASSIGN(string _Name) {
         void MEDIAINFO_ASSIGN(ref size_t Errors) {
             auto rv = dlsym(MediaInfo_Module, "MediaInfo" ~ MEDIAINFO_Ansi ~ "_" ~ _Name);
-            mixin("mediainfo_FuntionTable.MediaInfo_" ~ _Name) = mixin("cast(MEDIAINFO" ~ MEDIAINFO_Ansi ~ "_" ~ _Name ~ ")rv");
-            if (mixin("mediainfo_FuntionTable.MediaInfo_" ~ _Name) is null) Errors++;
+            mixin("mediainfo_FunctionTable.MediaInfo_" ~ _Name) = mixin("cast(MEDIAINFO" ~ MEDIAINFO_Ansi ~ "_" ~ _Name ~ ")rv");
+            if (mixin("mediainfo_FunctionTable.MediaInfo_" ~ _Name) is null) Errors++;
         }
     }
     template MEDIAINFOLIST_ASSIGN(string _Name) {
         void MEDIAINFOLIST_ASSIGN(ref size_t Errors) {
             auto rv = dlsym(MediaInfo_Module, "MediaInfoList" ~ MEDIAINFO_Ansi ~ "_" ~ _Name);
-            mixin("mediainfo_FuntionTable.MediaInfoList_" ~ _Name) = mixin("cast(MEDIAINFOLIST" ~ MEDIAINFO_Ansi ~ "_" ~ _Name ~ ")rv");
-            if (mixin("mediainfo_FuntionTable.MediaInfoList_" ~ _Name) is null) Errors++;
+            mixin("mediainfo_FunctionTable.MediaInfoList_" ~ _Name) = mixin("cast(MEDIAINFOLIST" ~ MEDIAINFO_Ansi ~ "_" ~ _Name ~ ")rv");
+            if (mixin("mediainfo_FunctionTable.MediaInfoList_" ~ _Name) is null) Errors++;
         }
     }
 }
@@ -268,7 +268,7 @@ struct MediaInfo_FunctionTable
     MEDIAINFOLIST_Count_Get_Files MediaInfoList_Count_Get_Files;
 }
 
-shared MediaInfo_FunctionTable mediainfo_FuntionTable;
+shared MediaInfo_FunctionTable mediainfo_FunctionTable;
 
 version(WINDOWS)
     enum MEDIAINFODLL_NAME = "MediaInfo.dll";

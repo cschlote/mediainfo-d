@@ -40,7 +40,7 @@ private:
         {
             if(_payload)
             {
-                mediainfo_FuntionTable.MediaInfo_Delete(_payload);
+                mediainfo_FunctionTable.MediaInfo_Delete(_payload);
                 _payload = null;
 				MediaInfoDLL_UnLoad();
             }
@@ -69,7 +69,7 @@ public:
             throw new MediaInfoException("Couldn't open mediainfo library");
         }
 
-        auto h = mediainfo_FuntionTable.MediaInfo_New();
+        auto h = mediainfo_FunctionTable.MediaInfo_New();
         info._data.refCountedStore.ensureInitialized();
         info._data._payload = h;
         return info;
@@ -119,7 +119,7 @@ public:
             static MediaInfo_Char* _fileNameRef;
             import std.utf;
             auto  filename = fileName.toUTFz!(MediaInfo_Char*);
-            auto rc = mediainfo_FuntionTable.MediaInfo_Open(handle, filename);
+            auto rc = mediainfo_FunctionTable.MediaInfo_Open(handle, filename);
             if(!rc)
             {
                 throw new MediaInfoException("Couldn't open file: " ~ fileName);
@@ -156,7 +156,7 @@ public:
      */
     size_t openBufferInit(long fileSize = -1, long fileOffset = 0)
     {
-        return mediainfo_FuntionTable.MediaInfo_Open_Buffer_Init(handle, fileSize, fileOffset);
+        return mediainfo_FunctionTable.MediaInfo_Open_Buffer_Init(handle, fileSize, fileOffset);
     }
     /**
      * Open a stream (Continue).
@@ -169,7 +169,7 @@ public:
      */
     size_t openBufferContinue(ubyte* buffer, size_t size)
     {
-        return mediainfo_FuntionTable.MediaInfo_Open_Buffer_Continue(handle, buffer, size);
+        return mediainfo_FunctionTable.MediaInfo_Open_Buffer_Continue(handle, buffer, size);
     }
     /**
      * Open a stream (Get the needed file Offset).
@@ -182,7 +182,7 @@ public:
      */
     long openBufferContinueGoToGet()
     {
-        return mediainfo_FuntionTable.MediaInfo_Open_Buffer_Continue_GoTo_Get(handle);
+        return mediainfo_FunctionTable.MediaInfo_Open_Buffer_Continue_GoTo_Get(handle);
     }
     /**
      * Open a stream (Finalize).
@@ -191,7 +191,7 @@ public:
      */
     size_t openBufferFinalize()
     {
-        return mediainfo_FuntionTable.MediaInfo_Open_Buffer_Finalize(handle);
+        return mediainfo_FunctionTable.MediaInfo_Open_Buffer_Finalize(handle);
     }
 /+        /**
      * (NOT IMPLEMENTED YET) Save the file
@@ -200,7 +200,7 @@ public:
      */
     void save()
     {
-        if(mediainfo_FuntionTable.MediaInfo_Save(handle))
+        if(mediainfo_FunctionTable.MediaInfo_Save(handle))
         {
             throw new MediaInfoException("Couldn't save file");
         }
@@ -216,7 +216,7 @@ public:
      */
     void close()
     {
-        mediainfo_FuntionTable.MediaInfo_Close(handle);
+        mediainfo_FunctionTable.MediaInfo_Close(handle);
         version(Workaround_UTF_Bug) {} else _fileNameRef = null;
     }
     /**
@@ -231,7 +231,7 @@ public:
     string inform(size_t reserved = 0)
     {
         import std.utf;
-        auto strptr = mediainfo_FuntionTable.MediaInfo_Inform(handle, reserved);
+        auto strptr = mediainfo_FunctionTable.MediaInfo_Inform(handle, reserved);
         auto str = strptr.fromStringz;
         return to!string(str);
     }
@@ -253,7 +253,7 @@ public:
         MediaInfo_info_t infoKind = MediaInfo_info_t.MediaInfo_Info_Text)
     {
         import std.utf;
-        auto strptr = mediainfo_FuntionTable.MediaInfo_GetI(handle, streamKind, streamNumber,
+        auto strptr = mediainfo_FunctionTable.MediaInfo_GetI(handle, streamKind, streamNumber,
             parameter, infoKind);
         auto str = strptr.fromStringz;
         return to!string(str);
@@ -280,7 +280,7 @@ public:
     {
         import std.utf;
         MediaInfo_Char* parameterZ = parameter.toUTFz!(MediaInfo_Char*);
-        const auto strptr = mediainfo_FuntionTable.MediaInfo_Get(handle, streamKind, streamNumber, parameterZ, infoKind, searchKind);
+        const auto strptr = mediainfo_FunctionTable.MediaInfo_Get(handle, streamKind, streamNumber, parameterZ, infoKind, searchKind);
         auto str = strptr.fromStringz;
         return to!string(str);
     }
@@ -304,7 +304,7 @@ public:
     void set(const(string) toSet, Stream streamKind, size_t streamNumber,
         size_t parameter, const(string) oldValue = "")
     {
-        if(!mediainfo_FuntionTable.MediaInfo_SetI(handle, toStringz(toSet), streamKind, streamNumber,
+        if(!mediainfo_FunctionTable.MediaInfo_SetI(handle, toStringz(toSet), streamKind, streamNumber,
             parameter, toStringz(oldValue)))
         {
             throw new MediaInfoException("Couldn't set parameter");
@@ -330,7 +330,7 @@ public:
     void set(const(string) toSet, Stream streamKind, size_t streamNumber,
         const(string) parameter, const(string) oldValue = "")
     {
-        if(!mediainfo_FuntionTable.MediaInfo_Set(handle, toStringz(toSet), streamKind, streamNumber,
+        if(!mediainfo_FunctionTable.MediaInfo_Set(handle, toStringz(toSet), streamKind, streamNumber,
             toStringz(parameter), toStringz(oldValue)))
         {
             throw new MediaInfoException("Couldn't set parameter");
@@ -351,7 +351,7 @@ public:
     {
         import std.utf;
         MediaInfo_Char* valueZ = value.toUTFz!(MediaInfo_Char*);
-        return mediainfo_FuntionTable.MediaInfo_Output_Buffer_Get(handle, valueZ);
+        return mediainfo_FunctionTable.MediaInfo_Output_Buffer_Get(handle, valueZ);
     }
     /**
      * Output the written size when "File_Duplicate" option is used.
@@ -365,7 +365,7 @@ public:
      */
     size_t outputBufferGet(size_t pos)
     {
-        return mediainfo_FuntionTable.MediaInfo_Output_Buffer_GetI(handle, pos);
+        return mediainfo_FunctionTable.MediaInfo_Output_Buffer_GetI(handle, pos);
     }
     /**
      * Configure or get information about MediaInfoLib
@@ -381,7 +381,7 @@ public:
         import std.utf;
         MediaInfo_Char* optionZ = option.toUTFz!(MediaInfo_Char*);
         MediaInfo_Char* valueZ = value.toUTFz!(MediaInfo_Char*);
-        auto strptr = mediainfo_FuntionTable.MediaInfo_Option(handle, optionZ, valueZ);
+        auto strptr = mediainfo_FunctionTable.MediaInfo_Option(handle, optionZ, valueZ);
         auto str = strptr.fromStringz;
         return to!string(str);
     }
@@ -389,7 +389,7 @@ public:
     /*
     static string optionStatic(const(string) option, const(string) value = "")
     {
-        return to!string(mediainfo_FuntionTable.MediaInfo_Option_Static(handle, toStringz(option), toStringz(value)));
+        return to!string(mediainfo_FunctionTable.MediaInfo_Option_Static(handle, toStringz(option), toStringz(value)));
     }*/
 
     /**
@@ -405,7 +405,7 @@ public:
      */
     size_t getState()
     {
-        return mediainfo_FuntionTable.MediaInfo_State_Get(handle);
+        return mediainfo_FunctionTable.MediaInfo_State_Get(handle);
     }
     /**
      * Count of streams of a stream kind (StreamNumber not filled), or count of piece of information in this stream.
@@ -416,6 +416,6 @@ public:
      */
     size_t getCount(MediaInfo_stream_t streamKind, size_t streamNumber = -1)
     {
-        return mediainfo_FuntionTable.MediaInfo_Count_Get(handle, streamKind, streamNumber);
+        return mediainfo_FunctionTable.MediaInfo_Count_Get(handle, streamKind, streamNumber);
     }
 }
