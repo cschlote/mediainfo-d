@@ -29,7 +29,7 @@ int main(string[] args)
     //~ writeln(infoParams);
     //~ string infoCodecs = info.option("Info_Codecs");
     //~ writeln(infoCodecs);
-    string infoInternet = info.option("Internet", "No");
+    const string infoInternet = info.option("Internet", "No");
     //~ writeln(infoInternet);
 
     info.open(fileName);

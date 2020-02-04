@@ -19,6 +19,7 @@ import mediainfodll;
 /** A exception of the mediainfo wrapper */
 public class MediaInfoException : Exception
 {
+    /// Constuctor
     public this(string msg)
     {
         super(msg);
@@ -64,14 +65,14 @@ public:
     static MediaInfo opCall()
     {
         MediaInfo info;
-        auto rc = MediaInfoDLL_Load();
+        const auto rc = MediaInfoDLL_Load();
         if(rc != 1) {
             throw new MediaInfoException("Couldn't open mediainfo library");
         }
 
-        auto h = mediainfo_FunctionTable.MediaInfo_New();
+        const auto h = mediainfo_FunctionTable.MediaInfo_New();
         info._data.refCountedStore.ensureInitialized();
-        info._data._payload = h;
+        info._data._payload = cast(void*)h;
         return info;
     }
 
@@ -98,7 +99,7 @@ public:
                 // Read some data to buffer...
                 buffer = fh.rawRead(rawbuffer);
                 // Sending the buffer to MediaInfo
-                auto status = this.openBufferContinue(buffer.ptr, buffer.length);
+                const auto status = this.openBufferContinue(buffer.ptr, buffer.length);
                 if (status&0x08) //Bit3=Finished
                     break;
                 // Testing if there is a MediaInfo request to go elsewhere
@@ -117,9 +118,9 @@ public:
         }
         else {
             static MediaInfo_Char* _fileNameRef;
-            import std.utf;
+            import std.utf : toUTFz;
             auto  filename = fileName.toUTFz!(MediaInfo_Char*);
-            auto rc = mediainfo_FunctionTable.MediaInfo_Open(handle, filename);
+            const auto rc = mediainfo_FunctionTable.MediaInfo_Open(handle, filename);
             if(!rc)
             {
                 throw new MediaInfoException("Couldn't open file: " ~ fileName);
@@ -230,8 +231,8 @@ public:
      */
     string inform(size_t reserved = 0)
     {
-        import std.utf;
-        auto strptr = mediainfo_FunctionTable.MediaInfo_Inform(handle, reserved);
+        import std.utf : toUTFz;
+        const auto strptr = mediainfo_FunctionTable.MediaInfo_Inform(handle, reserved);
         auto str = strptr.fromStringz;
         return to!string(str);
     }
@@ -252,8 +253,8 @@ public:
     string get(MediaInfo_stream_t streamKind, size_t streamNumber, size_t parameter,
         MediaInfo_info_t infoKind = MediaInfo_info_t.MediaInfo_Info_Text)
     {
-        import std.utf;
-        auto strptr = mediainfo_FunctionTable.MediaInfo_GetI(handle, streamKind, streamNumber,
+        import std.utf : toUTFz;
+        const auto strptr = mediainfo_FunctionTable.MediaInfo_GetI(handle, streamKind, streamNumber,
             parameter, infoKind);
         auto str = strptr.fromStringz;
         return to!string(str);
@@ -278,9 +279,10 @@ public:
         string parameter, MediaInfo_info_t infoKind = MediaInfo_info_t.MediaInfo_Info_Text,
         MediaInfo_info_t searchKind = MediaInfo_info_t.MediaInfo_Info_Name)
     {
-        import std.utf;
+        import std.utf : toUTFz;
         MediaInfo_Char* parameterZ = parameter.toUTFz!(MediaInfo_Char*);
-        const auto strptr = mediainfo_FunctionTable.MediaInfo_Get(handle, streamKind, streamNumber, parameterZ, infoKind, searchKind);
+        const auto strptr = mediainfo_FunctionTable.MediaInfo_Get(handle, 
+            streamKind, streamNumber, parameterZ, infoKind, searchKind);
         auto str = strptr.fromStringz;
         return to!string(str);
     }
@@ -349,7 +351,7 @@ public:
      */
     size_t outputBufferGet(const(string) value)
     {
-        import std.utf;
+        import std.utf : toUTFz;
         MediaInfo_Char* valueZ = value.toUTFz!(MediaInfo_Char*);
         return mediainfo_FunctionTable.MediaInfo_Output_Buffer_Get(handle, valueZ);
     }
@@ -378,10 +380,10 @@ public:
      */
     string option(const(string) option, const(string) value = "")
     {
-        import std.utf;
+        import std.utf : toUTFz;
         MediaInfo_Char* optionZ = option.toUTFz!(MediaInfo_Char*);
         MediaInfo_Char* valueZ = value.toUTFz!(MediaInfo_Char*);
-        auto strptr = mediainfo_FunctionTable.MediaInfo_Option(handle, optionZ, valueZ);
+        const auto strptr = mediainfo_FunctionTable.MediaInfo_Option(handle, optionZ, valueZ);
         auto str = strptr.fromStringz;
         return to!string(str);
     }
