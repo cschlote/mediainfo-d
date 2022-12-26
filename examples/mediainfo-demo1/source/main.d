@@ -42,9 +42,10 @@ int main(string[] args)
 
     const ulong nVideo = info.getCount(MediaInfo_stream_t.MediaInfo_Stream_Video);
     const ulong nAudio = info.getCount(MediaInfo_stream_t.MediaInfo_Stream_Audio);
+    const ulong nImage = info.getCount(MediaInfo_stream_t.MediaInfo_Stream_Image);
     const ulong nText = info.getCount(MediaInfo_stream_t.MediaInfo_Stream_Text);
 
-    if (nText == 0 && nVideo == 0 && nAudio == 0) {
+    if (nText == 0 && nVideo == 0 && nImage == 0 && nAudio == 0) {
         writeln("Found no media info on this file.");
         return 0;
     }
@@ -67,7 +68,7 @@ int main(string[] args)
     for (uint i = 0; i < nAudio; i++)
     {
         writefln("Audio track %s:", i);
-        std.stdio.writef("  Channels: %s",
+        writef("  Channels: %s",
                 info.get(MediaInfo_stream_t.MediaInfo_Stream_Audio, i, "Channel(s)"));
         string cpos = info.get(MediaInfo_stream_t.MediaInfo_Stream_Audio, i, "ChannelPositions");
         if (cpos != "")
@@ -83,6 +84,15 @@ int main(string[] args)
                     info.get(MediaInfo_stream_t.MediaInfo_Stream_Audio, i, "BitRate_Mode"));
         }
         writefln("  Format: %s", info.get(MediaInfo_stream_t.MediaInfo_Stream_Audio, i, "Format"));
+    }
+
+    for (uint i = 0; i < nImage; i++)
+    {
+        writefln("Image info %s:", i);
+        writefln("  Format: %s", info.get(MediaInfo_stream_t.MediaInfo_Stream_Image, i, "Format"));
+        writefln("  Width: %s", info.get(MediaInfo_stream_t.MediaInfo_Stream_Image, i, "Width"));
+        writefln("  Height: %s", info.get(MediaInfo_stream_t.MediaInfo_Stream_Image, i, "Height"));
+        writefln("  Inform:\n %s", info.inform());
     }
 
     for (uint i = 0; i < nText; i++)
